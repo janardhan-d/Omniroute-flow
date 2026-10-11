@@ -1,0 +1,31 @@
+# Render deployment configuration
+# Place this file at the repository root (./render.yaml) in your GitHub repo.
+# It tells Render how to build and run the OmniRoute Docker service.
+
+services:
+  - type: web
+    name: omniroute-flow
+    env: docker
+    dockerfilePath: Dockerfile
+    buildContext: .
+    plan: free
+    region: oregon
+    envVars:
+      - key: NODE_ENV
+        value: "production"
+      - key: PORT
+        value: "20128"
+      - key: HOST
+        value: "0.0.0.0"
+      - key: REQUIRE_API_KEY
+        value: "true"
+      - key: JWT_SECRET
+        fromSecret: true
+      - key: API_KEY_SECRET
+        fromSecret: true
+      - key: DATA_DIR
+        value: "/root/.omniroute"
+      - key: NEXT_PUBLIC_APP_URL
+        value: "https://your-omniroute-domain.com"
+    healthCheckPath: "/healthz"
+    autoDeploy: true
