@@ -1,4 +1,4 @@
-﻿name: Build Check
+name: Build Check
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Verify Setup
         run: echo "OmniRoute Flow is verified and ready for deployment."
