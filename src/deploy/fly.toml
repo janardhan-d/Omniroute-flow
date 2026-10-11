@@ -1,0 +1,29 @@
+app = "omniroute-ai-gateway"
+primary_region = "iad"
+
+[build]
+  dockerfile = "../Dockerfile"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "8080"
+  HOST = "0.0.0.0"
+  REQUIRE_API_KEY = "true"
+  DATA_DIR = "/data/.omniroute"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+[mounts]
+  source = "omniroute_data"
+  destination = "/data/.omniroute"
+  initial_size = "1gb"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1024mb"

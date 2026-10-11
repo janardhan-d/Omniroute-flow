@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  omniroute:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: omniroute_app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=20128
+      - HOST=0.0.0.0
+      - REQUIRE_API_KEY=true
+      - DATA_DIR=/root/.omniroute
+      - JWT_SECRET=${JWT_SECRET}
+      - API_KEY_SECRET=${API_KEY_SECRET}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-https://localhost}
+    volumes:
+      # Persistent storage for SQLite database and provider configurations
+      - omniroute_storage:/root/.omniroute
+    networks:
+      - omniroute_net
+    expose:
+      - "20128"
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: omniroute_caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN=${DOMAIN:-localhost}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - omniroute_net
+    depends_on:
+      - omniroute
+
+volumes:
+  omniroute_storage:
+    name: omniroute_storage
+  caddy_data:
+  caddy_config:
+
+networks:
+  omniroute_net:
+    driver: bridge
