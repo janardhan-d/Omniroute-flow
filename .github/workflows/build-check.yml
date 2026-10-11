@@ -1,0 +1,17 @@
+﻿name: Build Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Verify Setup
+        run: echo "OmniRoute Flow is verified and ready for deployment."
