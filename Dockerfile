@@ -19,13 +19,12 @@ ENV NPM_CONFIG_LEGACY_PEER_DEPS=true
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_OPTIONS="--max-old-space-size=2048"
 
-# Install dependencies
+# Copy package manifests and all build scripts needed by postinstall
 COPY package*.json ./
 COPY open-sse/package.json ./open-sse/package.json
-COPY scripts/build/postinstall.mjs ./scripts/build/postinstall.mjs
-COPY scripts/build/postinstallSupport.mjs ./scripts/build/postinstallSupport.mjs
-COPY scripts/build/native-binary-compat.mjs ./scripts/build/native-binary-compat.mjs
+COPY scripts ./scripts
 
+# Install dependencies (runs postinstall which has all scripts available)
 RUN npm install --prefer-offline --no-audit
 
 # Copy application source code
