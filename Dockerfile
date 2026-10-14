@@ -1,9 +1,9 @@
-﻿# ==============================================================================
+# ==============================================================================
 # OmniRoute Flow - Production Dockerfile (Optimized for Cloud Deployment)
 # ==============================================================================
 
 # --- Builder Stage ---
-FROM node:22-bookworm-slim AS builder
+FROM node:26-bookworm-slim AS builder
 WORKDIR /app
 
 # Install dependencies required for native modules (better-sqlite3)
@@ -34,7 +34,7 @@ COPY . .
 RUN npm run build
 
 # --- Runner Stage ---
-FROM node:22-bookworm-slim AS runner
+FROM node:26-bookworm-slim AS runner
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
